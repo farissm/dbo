@@ -24,3 +24,4 @@ go.work.sum
 # Other files
 .env
 /storage
+docker-compose.yml
