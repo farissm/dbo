@@ -13,3 +13,12 @@ type Customer struct {
 	Address   	string 		`gorm:"not null",json:"address"`
     Order    	[]Order 
 }
+
+type CustomerResponse struct {
+	ID 			int			`json:"id"`
+	Username 	string		`json:"username"`
+    FirstName   string		`json:"firstname"`
+	LastName   	string		`json:"lastname"`
+	Email   	string		`json:"email"`
+	Address   	string 		`json:"address"`
+}

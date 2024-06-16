@@ -53,13 +53,15 @@ func AuthMiddleware(db *gorm.DB) gin.HandlerFunc{
 
 		username := claim["Username"].(string)
 
-		err:= db.Where("username = ?", username).First(&model.Customer).Error
+		var customer model.Customer
+		err = db.Where("username = ?", username).First(&customer).Error
 		if err != nil {
 			response := helper.APIResponse(http.StatusUnauthorized, "Unauthorized")
 			c.AbortWithStatusJSON(http.StatusUnauthorized, response)
 			return			
 		}
 
-		c.Set("currentUser", user)
+		c.Set("currentUser", customer)
+		c.Next()
 	}
 } 

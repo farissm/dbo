@@ -16,8 +16,8 @@ func (c *Controller) Login(ctx *gin.Context) {
 	if ! hasAuth {
 		log.Errorf("FAILED hasAuth")
 
-		response := helper.APIResponse(http.StatusUnprocessableEntity, "Login Failed")
-		ctx.JSON(http.StatusUnprocessableEntity, response)
+		response := helper.APIResponse(http.StatusInternalServerError, "Internal Server Error")
+		ctx.JSON(http.StatusInternalServerError, response)
 		return
 	}
 	
@@ -29,21 +29,25 @@ func (c *Controller) Login(ctx *gin.Context) {
 
 	err:= c.db.Where("username = ?", username).Find(&customer).Error
 	if err != nil {
-		response := helper.APIResponse(http.StatusUnprocessableEntity, "Invalid username or password")
-		ctx.JSON(http.StatusUnprocessableEntity, response)
+		log.Errorf("Failed search username in db. Error: %s", err.Error())
+
+		response := helper.APIResponse(http.StatusInternalServerError, "Internal Server Error")
+		ctx.JSON(http.StatusInternalServerError, response)
 		return
 	}
 
 	if customer.ID == 0 {
-		response := helper.APIResponse(http.StatusUnprocessableEntity, "Invalid username or password")
-		ctx.JSON(http.StatusUnprocessableEntity, response)
+		response := helper.APIResponse(http.StatusBadRequest, "Invalid username or password")
+		ctx.JSON(http.StatusBadRequest, response)
 		return
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(customer.Password), []byte(password))
 	if err != nil {
-		response := helper.APIResponse(http.StatusUnprocessableEntity, "Invalid username or password")
-		ctx.JSON(http.StatusUnprocessableEntity, response)
+		log.Errorf("Failed compare bcrypt hash and password. Error: %s", err.Error())
+
+		response := helper.APIResponse(http.StatusInternalServerError, "Internal Server Error")
+		ctx.JSON(http.StatusInternalServerError, response)
 		return
 	}
 
@@ -51,8 +55,8 @@ func (c *Controller) Login(ctx *gin.Context) {
 	if err != nil {
 		log.Errorf("FAILED GenerateToken. Error= %s", err.Error())
 
-		response := helper.APIResponse(http.StatusBadRequest, "Login failed")
-		ctx.JSON(http.StatusBadRequest, response)
+		response := helper.APIResponse(http.StatusInternalServerError, "Internal Server Error")
+		ctx.JSON(http.StatusInternalServerError, response)
 		return
 	}
 

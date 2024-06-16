@@ -5,6 +5,7 @@ import (
 	"os"
 	"net/http"
 
+	"dbo/auth"
 	"dbo/config"
 	"dbo/controller"
 
@@ -38,11 +39,24 @@ func main() {
 		ct.JSON(http.StatusOK, "Test Backend Enginer DBO")
 	})
 
-	router.POST("/dbo/login", dboController.Login)
+	dbo := router.Group("/dbo")
 
-	router.POST("/dbo/create-customer", dboController.CreateCustomer)
-	// router.POST("/api/sendPefindoInquiry", auth.AuthMiddleware(authService, userService), pefindoHandler.SendPefindoUnderlying)
-	// router.GET("/api/readPefindoInquiry", auth.AuthMiddleware(authService, userService), pefindoHandler.ReadPefindoUnderlying)
+	dbo.POST("/login", dboController.Login)
+
+
+	customers := dbo.Group("/customers")
+	customers.POST("/create-customer", dboController.CreateCustomer)
+	customers.GET("/get-all-customer", auth.AuthMiddleware(db), dboController.GetCustomers)
+	customers.GET("/get-customer-by-id", auth.AuthMiddleware(db), dboController.GetCustomerById)
+	customers.PUT("/update-customer", auth.AuthMiddleware(db), dboController.UpdateCustomer)
+	customers.DELETE("/delete-customer", auth.AuthMiddleware(db), dboController.DeleteCustomer)
+
+	orders := dbo.Group("/orders")
+	orders.POST("/create-order", auth.AuthMiddleware(db), dboController.CreateOrder)
+	orders.GET("/get-all-order", auth.AuthMiddleware(db), dboController.GetOrders)
+	orders.GET("/get-order-by-id", auth.AuthMiddleware(db), dboController.GetOrderById)
+	orders.PUT("/update-order", auth.AuthMiddleware(db), dboController.UpdateOrder)
+	orders.DELETE("/delete-order", auth.AuthMiddleware(db), dboController.DeleteOrder)
 
 	router.Run(":"+os.Getenv("APP_PORT"))
 }
