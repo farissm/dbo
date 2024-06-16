@@ -502,11 +502,11 @@ none
 # How to run this program?
 1. create .env file, you can see the env format in env-example file
 2. create docker-composer.yml file, you can see the docker-composer file in docker-compose-example file
-3. run the command below to build docker images
+3. run the command below in your terminal to build docker images
 ```
 docker-compose build
 ```
-4. if step 3 success, then run the code below
+4. if step 3 success, then run the command below
 ```
 docker-compose up -d
 ```
