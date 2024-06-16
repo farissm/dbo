@@ -102,7 +102,7 @@ func (c *Controller) GetCustomers(ctx *gin.Context) {
 		return
 	}
 
-	var limitPage int = 3
+	var limitPage int = 5
 	var offsetPage int = (pageInt - 1) * limitPage
 	sql := `SELECT * FROM customers WHERE email LIKE ?
 	LIMIT ? OFFSET ?`

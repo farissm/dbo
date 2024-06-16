@@ -36,7 +36,7 @@ POST
 /dbo/customers/create-customer
 
 * **Description:**
-This API is used for creating user/similiar to register user
+This API is used for creating customer/similiar to register user
 
 * **Method:**
 POST
@@ -54,7 +54,7 @@ none
     "firstname": "coba",
     "lastname" : "123",
     "email" : "coba9@mail.com",
-    "address": "Jl Margonde"
+    "address": "Jl Margonda"
 }
 
 * **Success Response:**
@@ -293,26 +293,17 @@ none
 
 * **Success Response:**
 {
-    "CreatedAt": "2024-06-16T12:14:46.5979086+07:00",
-    "UpdatedAt": "2024-06-16T12:14:46.5979086+07:00",
+    "ID": 0,
+    "CreatedAt": "2024-06-16T19:19:45.8378358+07:00",
+    "UpdatedAt": "2024-06-16T19:19:45.8378358+07:00",
     "DeletedAt": null,
-    "ID": 12,
-    "Name": "Sirloin",
-    "Quantity": 1,
-    "CustomerID": 7,
-    "Customer": {
-        "CreatedAt": "2024-06-16T07:56:41.241+07:00",
-        "UpdatedAt": "2024-06-16T07:56:41.241+07:00",
-        "DeletedAt": null,
-        "ID": 7,
-        "Username": "coba6",
-        "Password": "$2a$10$wyPdbGPq9Fh/9xPmAEmoeOJ9uNt2Q/6AZZMzFYrmAiL6.vwtIm3q6",
-        "FirstName": "coba",
-        "LastName": "123",
-        "Email": "coba8@mail.com",
-        "Address": "Jl Margonde",
-        "Order": null
-    }
+    "id": 3,
+    "name": "Cat Nippon",
+    "quantity": 10,
+    "price": 1300000,
+    "status": "Arrived",
+    "customer_id": 6,
+    "customer": {...}
 }
 
 * **Error Response:**
@@ -346,14 +337,25 @@ none
 * **Success Response:**
 [
     {
-        "id": 11,
-        "name": "bumbu bebek",
-        "quantity": 3
+        "id": 1,
+        "name": "test item",
+        "quantity": 1,
+        "price": 250000,
+        "status": "Prepared"
     },
     {
-        "id": 12,
-        "name": "Sirloin",
-        "quantity": 5
+        "id": 2,
+        "name": "Lem Kayu",
+        "quantity": 4,
+        "price": 135000,
+        "status": "Sending"
+    },
+    {
+        "id": 3,
+        "name": "Cat Nippon",
+        "quantity": 10,
+        "price": 1300000,
+        "status": "Arrived"
     }
 ]
 
@@ -391,9 +393,11 @@ none
 
 * **Success Response:**
 {
-    "id": 12,
-    "name": "Sirloin",
-    "quantity": 5
+    "id": 3,
+    "name": "Cat Nippon",
+    "quantity": 10,
+    "price": 1300000,
+    "status": "Arrived"
 }
 
 * **Error Response:**
@@ -429,14 +433,11 @@ none
 * **JSON Body:**
 You can add whatever payload as long as it's property registered in order struct. The json form of the order struct is: <br/>
 {
-    "CreatedAt": "2024-06-16T12:14:46.5979086+07:00",
-    "UpdatedAt": "2024-06-16T12:14:46.5979086+07:00",
-    "DeletedAt": null,
-    "ID": 12,
-    "Name": "Sirloin",
-    "Quantity": 1,
-    "CustomerID": 7,
-    "Customer": {...}
+    "id": 3,
+    "name": "Cat Nippon",
+    "quantity": 10,
+    "price": 1300000,
+    "status": "Declined"
 }
 
 * **Success Response:**
@@ -449,8 +450,8 @@ You can add whatever payload as long as it's property registered in order struct
   * **code:** 400 <br />
   * **Content:** {
         "code": 400,
-        "message": "missing customer id"
-    }order
+        "message": "missing order id"
+    }
 
   * **code:** 500 <br />
   * **Content:** {
@@ -498,3 +499,15 @@ none
     }
 
 ------------------------------------------------------------------------------------------------------------------------------------------------
+# How to run this program?
+1. create .env file, you can see the env format in env-example file
+2. create docker-composer.yml file, you can see the docker-composer file in docker-compose-example file
+3. run the command below to build docker images
+```
+docker-compose build
+```
+4. if step 3 success, then run the code below
+```
+docker-compose up -d
+```
+5. if step 4 success, Congrats!! your system successfully running in docker and you can access it

@@ -67,7 +67,7 @@ func (c *Controller) GetOrders(ctx *gin.Context) {
 		return
 	}
 
-	var limitPage int = 3
+	var limitPage int = 5
 	var offsetPage int = (pageInt - 1) * limitPage
 	sql := `SELECT * FROM orders WHERE name LIKE ?
 	LIMIT ? OFFSET ?`
@@ -129,7 +129,7 @@ func (c *Controller) UpdateOrder(ctx *gin.Context) {
 		return
 	}
 
-	sql := `UPDATE orders SET name = COALESCE(NULLIF(?, ''), name), quantity = COALESCE(NULLIF(?, 0), quantity), updated_at = ? WHERE id = ?`
+	sql := `UPDATE orders SET name = COALESCE(NULLIF(?, ''), name), quantity = COALESCE(NULLIF(?, 0), quantity), price = COALESCE(NULLIF(?, 0), price), status = COALESCE(NULLIF(?, ''), status), updated_at = ? WHERE id = ?`
 
 	if err = c.db.Exec(sql, order.Name, order.Quantity, time.Now().Format("2006-01-02 15:04:05"), orderId).Error; err != nil {
 		log.Errorf("Error update pefindo underlying status at repository %v", err)

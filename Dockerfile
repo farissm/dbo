@@ -1,35 +1,23 @@
-############################
-# STEP 1 build executable binary
-############################
-FROM golang:1.21.10-alpine3.18 AS builder
-ENV USER=appuser
-ENV UID=10001
-RUN adduser \
-    --disabled-password \
-    --gecos "" \
-    --home "/nonexistent" \
-    --shell "/sbin/nologin" \
-    --no-create-home \
-    --uid "${UID}" \
-    "${USER}"
-RUN mkdir /app
-ADD . /app
-WORKDIR /app
-RUN go mod tidy
-RUN go build -o dbo .
+# Start from the official Golang image
+FROM golang:1.21.10-alpine3.18 AS build
 
-############################
-# STEP 2 build a small image
-############################
-FROM alpine
-RUN mkdir /server
-RUN apk update && apk add --no-cache tzdata && \
-apk add p7zip
-ENV TZ="Asia/Jakarta"
-COPY --from=builder /etc/passwd /etc/passwd
-COPY --from=builder /etc/group /etc/group
-COPY --from=builder /app/.env /server/.env
-COPY --from=builder /app/dbo /server
-WORKDIR /server 
-EXPOSE 3013
-CMD ["/server/dbo"]
+# Set the Current Working Directory inside the container
+WORKDIR /app
+
+# Copy go mod and sum files
+COPY go.mod go.sum ./
+
+# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
+RUN go mod download
+
+# Copy the source from the current directory to the Working Directory inside the container
+COPY . .
+
+# Build the Go app
+RUN go build -o main .
+
+# Expose port 8080 to the outside world
+EXPOSE 3007
+
+# Command to run the executable
+CMD ["./main"]
