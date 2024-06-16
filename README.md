@@ -511,3 +511,12 @@ docker-compose build
 docker-compose up -d
 ```
 5. if step 4 success, Congrats!! your system successfully running in docker and you can access it
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+# ER Diagram
+
+Here's the ER Diagram of the system:
+
+![ER Diagram](./dbo-system-erd.png)
+
+the ERD above represent that the system have 2 tables with the relation of this table is 1 to many (1 user can have many orders).
